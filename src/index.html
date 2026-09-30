@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Form Studio — Three.js playground</title>
+    <link rel="icon" href="./img/favicon.svg" />
+    <link rel="stylesheet" href="./scss/style.scss" />
+    <script type="module" src="./js/index.js"></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="./"><b>◈</b> form<span>studio</span><small>PLAYGROUND</small></a>
+      <div class="project">Untitled exploration <i></i></div>
+      <button id="export" class="button">↗ Export code</button>
+    </header>
+    <main>
+      <aside class="library">
+        <div class="eyebrow">WORKSPACE <span>01</span></div>
+        <div class="active-project">
+          ◈
+          <div>Shape exploration<small>Three.js / interactive scene</small></div>
+        </div>
+        <h2>Elements <span>6</span></h2>
+        <p class="muted">A starting point for your next idea.</p>
+        <div id="elements"></div>
+        <div class="note">
+          <b>✧</b><strong>Make it your own.</strong>
+          <p>Pick a form. Tweak the details.<br />See where it takes you.</p>
+          <a href="https://github.com/Robpayot/vite-threejs-template" target="_blank" rel="noopener"
+            >Based on Robpayot’s template ↗</a
+          >
+        </div>
+      </aside>
+      <section class="center">
+        <div class="viewport-head">
+          <div><i></i> Live preview <em>/</em> <span id="scene-name">Torus knot</span></div>
+          <div class="segmented">
+            <button id="solid" class="selected">Solid</button><button id="wire">Wireframe</button>
+          </div>
+        </div>
+        <div id="viewport">
+          <canvas id="scene" aria-label="Interactive 3D scene. Drag to orbit; scroll to zoom."></canvas>
+          <div class="view-label">PERSPECTIVE <span id="fps">60 FPS</span></div>
+          <div class="view-tools">
+            <button id="reset-camera" aria-label="Reset camera" title="Reset camera">⌖</button
+            ><button id="pause" aria-label="Pause rotation" title="Pause rotation">Ⅱ</button>
+          </div>
+          <div class="caption">
+            <span id="shape-number">01 / 06</span>
+            <h1 id="hero-name">Torus knot</h1>
+            <p>Small experiments. Infinite possibilities.</p>
+          </div>
+          <div class="hint">↔ Drag to orbit <em>·</em> Scroll to zoom</div>
+        </div>
+        <section class="editor">
+          <div class="editor-head">
+            <div class="file-tab"><b>JS</b><span id="filename">torus-knot.js</span><span id="dirty"></span></div>
+            <div class="editor-actions">
+              <button id="reset-code">Reset code</button><button id="run">▶ Run <kbd>Ctrl ↵</kbd></button>
+            </div>
+          </div>
+          <div class="code-area">
+            <pre id="line-numbers" aria-hidden="true"></pre>
+            <textarea
+              id="code"
+              spellcheck="false"
+              aria-label="Element JavaScript code"
+              autocapitalize="off"
+              autocomplete="off"
+              wrap="off"
+            ></textarea>
+          </div>
+          <div class="editor-status">
+            <span id="status" role="status">Ready</span><span>JavaScript <em>/</em> THREE + material available</span>
+          </div>
+        </section>
+      </section>
+      <aside class="inspector">
+        <div class="eyebrow">INSPECTOR <span>◉</span></div>
+        <div class="object-title">
+          <b>◈</b>
+          <div>
+            <h3 id="object-name">Torus knot</h3>
+            <p>Selected element</p>
+          </div>
+        </div>
+        <section class="controls">
+          <h3>Appearance</h3>
+          <label for="material">Material</label
+          ><select id="material">
+            <option value="standard">Studio / soft metal</option>
+            <option value="normal">Normal / spectrum</option>
+            <option value="basic">Basic / unlit</option>
+          </select>
+          <div class="color-row">
+            <label for="color">Base color</label>
+            <div><input type="color" id="color" value="#a2b9f7" /><span id="hex">#A2B9F7</span></div>
+          </div>
+          <div id="swatches"></div>
+          <label class="range-label" for="roughness">Roughness <output id="roughness-value">0.32</output></label
+          ><input id="roughness" type="range" min="0" max="1" step="0.01" value="0.32" /><label
+            class="range-label"
+            for="metalness"
+            >Metalness <output id="metalness-value">0.35</output></label
+          ><input id="metalness" type="range" min="0" max="1" step="0.01" value="0.35" />
+        </section>
+        <section class="controls">
+          <h3>Transform</h3>
+          <label class="range-label" for="scale">Scale <output id="scale-value">1.00</output></label
+          ><input id="scale" type="range" min="0.3" max="1.8" step="0.01" value="1" /><label
+            class="range-label"
+            for="rotation"
+            >Rotation Y <output id="rotation-value">0°</output></label
+          ><input id="rotation" type="range" min="0" max="360" step="1" value="0" />
+        </section>
+        <section class="controls">
+          <h3>Scene</h3>
+          <label class="toggle-row">Auto rotate<input id="auto-rotate" type="checkbox" checked role="switch" /></label
+          ><label class="toggle-row">Floor grid<input id="grid" type="checkbox" checked role="switch" /></label
+          ><label class="range-label" for="speed">Rotation speed <output id="speed-value">0.30</output></label
+          ><input id="speed" type="range" min="0" max="1.5" step="0.05" value="0.3" />
+        </section>
+        <div class="tip">
+          LIVE WORKSPACE
+          <p>Changes stay in this browser. Export your code when you’re ready to build.</p>
+        </div>
+      </aside>
+    </main>
+    <footer>
+      <span><i></i> <span id="save-status">Saved locally</span></span
+      ><span>Built with Three.js <em>/</em> Made for exploration</span><span>FORM STUDIO <em>v2.0</em></span>
+    </footer>
+  </body>
+</html>
