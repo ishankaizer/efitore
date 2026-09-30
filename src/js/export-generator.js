@@ -1,3 +1,4 @@
+import { generateFramerComponent } from './framer-export'
 import particleSource from './particle-runtime.js?raw'
 import mediaSource from './media-runtime.js?raw'
 
@@ -20,7 +21,9 @@ export async function mountEffect(container, options = {}) {
       await new Promise((resolve,reject)=>{video.onloadeddata=resolve;video.onerror=()=>reject(new Error('Video could not load'));video.src=config.media;video.load()});
       texture=new THREE.VideoTexture(video);
     } else texture=await new THREE.TextureLoader().loadAsync(config.media);
-    item=createMediaObject(THREE,texture,s,config.aspect);root.add(item.group);
+    const source=texture.image;
+    const aspect=(source.videoWidth||source.naturalWidth||source.width)/(source.videoHeight||source.naturalHeight||source.height);
+    item=createMediaObject(THREE,texture,s,Number.isFinite(aspect)&&aspect>0?aspect:config.aspect);root.add(item.group);
   } else {
     const material=s.material==='normal'?new THREE.MeshNormalMaterial():s.material==='basic'?new THREE.MeshBasicMaterial({color:s.color}):new THREE.MeshStandardMaterial({color:s.color,roughness:s.roughness,metalness:s.metalness});
     material.wireframe=s.wireframe;
@@ -128,22 +131,6 @@ document.getElementById('return').onclick=()=>controller.reassemble();
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Form Studio effect</title><style>body{margin:0;background:${
     project.settings.background || '#181c25'
   };font-family:system-ui;color:#dde8ff}#stage{height:100dvh}nav{position:fixed;bottom:20px;left:20px;display:flex;gap:8px}button{padding:10px 16px;border:1px solid #667;background:#1b233de0;color:inherit;border-radius:6px;cursor:pointer}</style><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js","three/examples/jsm/controls/OrbitControls.js":"https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/controls/OrbitControls.js"}}</script></head><body><div id="stage"></div><nav><button id="play">Pause</button><button id="blast">Replay</button><button id="return">Reassemble</button></nav><script type="module">${script}</script></body></html>`
-  const framer = `// Framer Code Component: paste into a new code file. No Three.js package setup.
-// The scene is isolated in an iframe and loads Three.js from a pinned CDN URL.
-import * as React from 'react';
-const documentHTML = ${JSON.stringify(html)};
-/**
- * @framerSupportedLayoutWidth any
- * @framerSupportedLayoutHeight any
- */
-export default function FormEffect({ style, showControls = false }) {
-  const source = showControls ? documentHTML : documentHTML.replace('</style>', 'nav{display:none}</style>');
-  return React.createElement('iframe', {
-    title: 'Form Studio interactive effect', srcDoc: source,
-    sandbox: 'allow-scripts', allow: 'autoplay; fullscreen',
-    style: { width: '100%', height: 480, border: 0, display: 'block', ...style }
-  });
-}
-`
+  const framer = generateFramerComponent(project, html, json)
   return { js, react, framer, html, json }
 }

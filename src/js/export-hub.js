@@ -27,7 +27,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
     recording = false
   const filename = {
     react: 'FormEffect.jsx',
-    framer: 'FormEffect-Framer.jsx',
+    framer: 'FormEffect-Framer.tsx',
     js: 'form-effect.js',
     html: 'form-effect.html',
     json: 'form-studio-project.json',
@@ -36,7 +36,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
     react:
       'Install three@0.149.0 and import FormEffect in your React app. The component creates and cleans up its canvas. Set its width and height with the style prop.',
     framer:
-      'In Framer, create a Code file, paste this component and drag FormEffect onto the canvas. The interactive scene runs inside an iframe. No npm setup; internet is needed for Three.js. For larger media, enter a direct hosted image/video URL below to keep this file under Framer’s 1 MB limit.',
+      'Create a Framer Code Component, replace its starter code with this entire file and save. Drag FormEffect onto the canvas. Select it, choose Image or Video in the right sidebar, and upload your file there. Media is not embedded in the code; no hosted URL is needed.',
     js: 'Install three@0.149.0. Import mountEffect, then await mountEffect(container). The controller exposes trigger(), reassemble(), pause() and dispose().',
     html: 'Upload this file to a static host or open it in a browser. Media is embedded. Internet is needed for Three.js. The effect stays interactive.',
     json: 'An editable Form Studio project, including this scene’s settings and media. Reopen it with Open project. Shape projects also contain your JavaScript.',
@@ -54,7 +54,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
       b.setAttribute('aria-pressed', b.dataset.format === format)
     }
     $('export-guide').textContent = guide[format]
-    $('export-url-label').hidden = currentProject?.kind !== 'media' || !['js', 'react', 'framer'].includes(format)
+    $('export-url-label').hidden = currentProject?.kind !== 'media' || !['js', 'react'].includes(format)
     $('export-filename').textContent = filename[format]
     const code = text()
     $('export-code').value =
@@ -67,12 +67,12 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
     $('export-copy').disabled = $('export-download').disabled = !code || oversized
     if (oversized)
       feedback(
-        'Too large for Framer (1 MB maximum). Enter a direct hosted media URL below, or use a smaller media file, then export again.',
+        'Too large for Framer (1 MB maximum). Reduce the custom shape code before exporting again. Media uploads are handled separately inside Framer.',
         true
       )
     else
       feedback(
-        'Ready to export. Media URL changes apply to React, Framer and Three.js; HTML and project files keep embedded media.'
+        'Ready to export. Framer includes upload controls. Media URL changes apply to React and Three.js; HTML and project files keep embedded media.'
       )
   }
   function regenerate() {
