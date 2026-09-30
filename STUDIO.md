@@ -33,7 +33,7 @@ Drag to orbit, scroll to zoom and hover to distort. Controls adjust deformation,
 - **Transparent PNG**: current rendered frame at the viewport resolution.
 - **Record 6-second clip**: captures the rendered canvas at 30 FPS, without audio or editor UI. Output is WebM or MP4 according to browser support. It records the current play/pause state.
 
-Media is embedded by default. React and JavaScript exports also accept a hosted media URL; the server must permit cross-origin loading. Large embedded videos create large code files. Browser autoplay policies may require a click before video playback.
+Media is embedded by default. React, Framer and JavaScript exports also accept a hosted media URL; the server must permit cross-origin loading. Large embedded videos create large code files. Browser autoplay policies may require a click before video playback.
 
 ## Storage and source
 
@@ -46,3 +46,5 @@ Storage belongs to the exact URL/port. Clearing site data removes saved media an
 - `src/index.html` / `src/scss/style.scss`: workspace layout and styling.
 
 The original template's MIT license and source files are retained. This is an original implementation of the general particle-banner technique, not a reproduction of the reference portfolio's full choreography or branding.
+
+Framer code files have a 1 MB limit. Oversized Framer exports are blocked before copying. Upload the original media to a host that permits cross-origin loading, paste its direct image/video URL in the export panel, and copy the smaller component. A sharing-page URL is not a direct media URL.

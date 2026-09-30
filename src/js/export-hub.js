@@ -36,7 +36,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
     react:
       'Install three@0.149.0 and import FormEffect in your React app. The component creates and cleans up its canvas. Set its width and height with the style prop.',
     framer:
-      'In Framer, create a Code file, paste this component and drag FormEffect onto the canvas. The interactive scene runs inside an iframe. No npm setup; internet is needed for Three.js.',
+      'In Framer, create a Code file, paste this component and drag FormEffect onto the canvas. The interactive scene runs inside an iframe. No npm setup; internet is needed for Three.js. For larger media, enter a direct hosted image/video URL below to keep this file under Framer’s 1 MB limit.',
     js: 'Install three@0.149.0. Import mountEffect, then await mountEffect(container). The controller exposes trigger(), reassemble(), pause() and dispose().',
     html: 'Upload this file to a static host or open it in a browser. Media is embedded. Internet is needed for Three.js. The effect stays interactive.',
     json: 'An editable Form Studio project, including this scene’s settings and media. Reopen it with Open project. Shape projects also contain your JavaScript.',
@@ -54,7 +54,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
       b.setAttribute('aria-pressed', b.dataset.format === format)
     }
     $('export-guide').textContent = guide[format]
-    $('export-url-label').hidden = currentProject?.kind !== 'media' || !['js', 'react'].includes(format)
+    $('export-url-label').hidden = currentProject?.kind !== 'media' || !['js', 'react', 'framer'].includes(format)
     $('export-filename').textContent = filename[format]
     const code = text()
     $('export-code').value =
@@ -63,11 +63,23 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
         : code
     $('export-bytes').textContent = (new Blob([code]).size / 1024).toFixed(1) + ' KB'
     $('export-copy').textContent = format === 'json' ? 'Copy JSON' : 'Copy code'
+    const oversized = format === 'framer' && new Blob([code]).size >= 1048576
+    $('export-copy').disabled = $('export-download').disabled = !code || oversized
+    if (oversized)
+      feedback(
+        'Too large for Framer (1 MB maximum). Enter a direct hosted media URL below, or use a smaller media file, then export again.',
+        true
+      )
+    else
+      feedback(
+        'Ready to export. Media URL changes apply to React, Framer and Three.js; HTML and project files keep embedded media.'
+      )
   }
   function regenerate() {
     if (!currentProject) return
     const url = $('export-media-url').value.trim()
     if (url && !/^https?:\/\//i.test(url)) {
+      $('export-copy').disabled = $('export-download').disabled = true
       feedback('Use an http or https URL for hosted media.', true)
       return
     }
@@ -87,8 +99,6 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
       currentProject = { format: 'form-studio', version: 2, ...(await getProvider().project()) }
       $('export-media-url').value = ''
       regenerate()
-      $('export-copy').disabled = $('export-download').disabled = false
-      feedback('Exports use the last successfully applied code. Choose the format that fits your destination.')
     } catch (e) {
       feedback(e.message, true)
     }
@@ -99,7 +109,7 @@ export function createExportHub({ renderer, scene, camera, getProvider, importPr
       format = button.dataset.format
       render()
     }
-  $('export-media-url').onchange = regenerate
+  $('export-media-url').oninput = regenerate
   $('export-copy').onclick = async () => {
     try {
       await navigator.clipboard.writeText(text())
